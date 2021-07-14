@@ -1,24 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit</title>
-</head>
-<body>
-    <h1>Edit Page</h1>
+<% layout('layouts/boilerplate') -%>
 
-    <form action="/collegeQuora/<%= reqQuestion._id%>/edit?_method=PUT" method ="POST">
-        <div>
-            <label for="question" >Question : </label>
-            <input type="text" id="question" name="question[question]" value="<%= reqQuestion.question %> ">
+<div class="container col-6 offset-3 my-5 border border-3">
+    <div class="container d-flex justify-content-center align-items-center my-2 mx-3">
+        <h1>Edit Page</h1>
+    </div>
+    <form class="my-3 mx-3" action="/collegeQuora/<%= reqQuestion._id%>/edit?_method=PUT" method="POST">
+        <div class="mb-3">
+            <label for="question" class="form-label">Question : </label>
+            <input type="text" class="form-control" id="question" value="<%= reqQuestion.question %>" name="question[question]">
         </div>
-        <button>DONE</button>
+        <div class="container d-flex justify-content-center align-items-center mt-2 mb-3">
+            <button class="btn-danger">DONE</button>
+        </div>
     </form>
-
-    <hr>
-
     <a href="/collegeQuora/">Back</a>
-</body>
-</html>
+</div>

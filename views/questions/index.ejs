@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College-Quora</title>
-</head>
-<body>
-    <h1>All Questions !</h1>
-    <a href="/collegeQuora/new">New Question</a>
-    <hr>
-    <ul>
-        <% for(let q of questions){ %> 
-            <li>
-                <a href="/collegeQuora/<%= q._id %>"> <%= q.question %> </a>
-            </li>
-        <% } %> 
-    </ul>
-</body>
-</html>
+<% layout('layouts/boilerplate') -%>
+
+<h1>All Questions !</h1>
+<a href="/collegeQuora/new">New Question</a>
+<hr>
+<% for(let q of questions){ %>
+    <div class="card my-2">
+        <div class="card-body">
+            <a href="/collegeQuora/<%= q._id %>"><%= q.question %></a>
+        </div>
+    </div>
+<% } %>

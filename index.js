@@ -28,12 +28,16 @@ mongoose.connect('mongodb://localhost:27017/collegeQuora', {
     .catch((err) => {
         console.log('IN MONGOOSE SOMETHING WENT WRONG', err);
     })
+ 
 
 
+app.engine('ejs', ejsMate); // for ejs-mate 
 app.set('view engine', 'ejs'); // setting up view engine
 app.set('views', path.join(__dirname, 'views')); // setting up the views dir
 app.use(express.urlencoded({extended: true})) // to parse the req.post body
 app.use(methodOverride('_method'));
+
+
 
 // app.get('/create', async(req,res) => {
 //     const newQuestinon = await new Question({question: "this is third question ?"});
