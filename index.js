@@ -61,6 +61,24 @@ const validateQuestion = (req, res, next) => {
     }
 }
 
+const DateAndMonth = () => {
+    const d = new Date();
+    const date = d.getDate();
+    const month = d.toLocaleString('default', {month: 'long'})
+    const year = d.getFullYear();
+    const finalDate = `${month} ${date} ${year}`;
+    return finalDate;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -76,7 +94,8 @@ app.get('/collegeQuora/new', (req, res) => {
 app.post('/collegeQuora/new', validateQuestion, catchAsync( async(req, res, next) => {
 
     const question = req.body.question
-    const newQuestion = new Question({question: question.question});
+    const currentDate = DateAndMonth();
+    const newQuestion = new Question({question: question.question, date: currentDate});
     await newQuestion.save();
     res.redirect(`/collegeQuora/${newQuestion._id}`);
 
