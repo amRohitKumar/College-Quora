@@ -9,7 +9,10 @@ const localStrategy = require('passport-local');
 const flash = require('connect-flash');
 const session = require('express-session');
 const Question = require('./models/questions');
-
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
+const Joi = require('joi');
+const {questionSchema} = require('./JOImodels/schema');
 
 
 
@@ -45,49 +48,76 @@ app.use(methodOverride('_method'));
 //     res.send("new question created !!");
 // })
 
-app.get('/collegeQuora', async (req, res) => {
+
+const validateQuestion = (req, res, next) => {
+    
+    const {error} = questionSchema.validate(req.body);
+
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }else{
+        next();
+    }
+}
+
+
+
+
+app.get('/collegeQuora', catchAsync( async (req, res) => {
     const questions = await Question.find({});
     res.render('questions/index', {questions});
-})
+}))
 
 app.get('/collegeQuora/new', (req, res) => {
     res.render('questions/new');
 })
 
-app.post('/collegeQuora/new', async(req, res) => {
+app.post('/collegeQuora/new', validateQuestion, catchAsync( async(req, res, next) => {
+
     const question = req.body.question
-    // res.send(question.question);
     const newQuestion = new Question({question: question.question});
     await newQuestion.save();
     res.redirect(`/collegeQuora/${newQuestion._id}`);
-})
 
-app.get('/collegeQuora/:id', async (req, res) => {
+}))
+
+app.get('/collegeQuora/:id', catchAsync( async (req, res) => {
     const ID = req.params.id;
     // console.log(ID);
     const reqQuestion = await Question.findById(ID);
     // res.send(ID);
     res.render('questions/show', {reqQuestion});
-})
+}))
 
-app.get('/collegeQuora/:id/edit', async (req, res) => {
+app.get('/collegeQuora/:id/edit', catchAsync(async (req, res) => {
     const reqQuestion = await Question.findById(req.params.id);
     res.render('questions/edit', {reqQuestion});
-})
+}))
 
-app.put('/collegeQuora/:id/edit', async (req, res) => {
+app.put('/collegeQuora/:id/edit', validateQuestion, catchAsync( async (req, res) => {
     const newQuestion = req.body.question.question;
     // console.log(newQuestion);
     const ID = req.params.id;
     const updatedQuestion = await Question.findByIdAndUpdate(ID, {question: newQuestion});
     res.redirect(`/collegeQuora/${ID}`);
     // res.send('you got me');
-})
+}))
 
-app.delete('/collegeQuora/:id', async (req, res) => {
+app.delete('/collegeQuora/:id', catchAsync( async (req, res) => {
     const ID = req.params.id;
     await Question.findByIdAndDelete(ID);
     res.redirect('/collegeQuora');
+}))
+
+app.all('*', (req, res, next) => {
+    next(new ExpressError("Page not found !", 404));
+})
+
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = "Something went wrong"} = err;
+    res.status(statusCode).render('error', {err});
+    res.send();
 })
 
 app.listen(PORT, ()=> {
