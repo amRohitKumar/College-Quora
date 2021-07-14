@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+</head>
+<body>
+    <h1>Edit Page</h1>
+
+    <form action="/collegeQuora/<%= reqQuestion._id%>/edit?_method=PUT" method ="POST">
+        <div>
+            <label for="question" >Question : </label>
+            <input type="text" id="question" name="question[question]" value="<%= reqQuestion.question %> ">
+        </div>
+        <button>DONE</button>
+    </form>
+
+    <hr>
+
+    <a href="/collegeQuora/">Back</a>
+</body>
+</html>

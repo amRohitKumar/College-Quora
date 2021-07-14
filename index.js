@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/collegeQuora', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
 })
     .then(() => {
         console.log('MONGOOSE CONNECTION OPEN');
@@ -30,8 +30,10 @@ mongoose.connect('mongodb://localhost:27017/collegeQuora', {
     })
 
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs'); // setting up view engine
+app.set('views', path.join(__dirname, 'views')); // setting up the views dir
+app.use(express.urlencoded({extended: true})) // to parse the req.post body
+app.use(methodOverride('_method'));
 
 // app.get('/create', async(req,res) => {
 //     const newQuestinon = await new Question({question: "this is third question ?"});
@@ -44,12 +46,44 @@ app.get('/collegeQuora', async (req, res) => {
     res.render('questions/index', {questions});
 })
 
+app.get('/collegeQuora/new', (req, res) => {
+    res.render('questions/new');
+})
+
+app.post('/collegeQuora/new', async(req, res) => {
+    const question = req.body.question
+    // res.send(question.question);
+    const newQuestion = new Question({question: question.question});
+    await newQuestion.save();
+    res.redirect(`/collegeQuora/${newQuestion._id}`);
+})
+
 app.get('/collegeQuora/:id', async (req, res) => {
     const ID = req.params.id;
-    console.log(ID);
+    // console.log(ID);
     const reqQuestion = await Question.findById(ID);
     // res.send(ID);
     res.render('questions/show', {reqQuestion});
+})
+
+app.get('/collegeQuora/:id/edit', async (req, res) => {
+    const reqQuestion = await Question.findById(req.params.id);
+    res.render('questions/edit', {reqQuestion});
+})
+
+app.put('/collegeQuora/:id/edit', async (req, res) => {
+    const newQuestion = req.body.question.question;
+    // console.log(newQuestion);
+    const ID = req.params.id;
+    const updatedQuestion = await Question.findByIdAndUpdate(ID, {question: newQuestion});
+    res.redirect(`/collegeQuora/${ID}`);
+    // res.send('you got me');
+})
+
+app.delete('/collegeQuora/:id', async (req, res) => {
+    const ID = req.params.id;
+    await Question.findByIdAndDelete(ID);
+    res.redirect('/collegeQuora');
 })
 
 app.listen(PORT, ()=> {

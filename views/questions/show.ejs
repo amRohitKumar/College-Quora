@@ -9,5 +9,13 @@
 <body>
     <h1>Show page</h1>
     <%= reqQuestion.question %> 
+    <hr>
+    <a href="/collegeQuora/">Index Page</a>
+    <hr>
+    <form action="/collegeQuora/<%= reqQuestion._id %>?_method=DELETE" method="POST">
+        <button>DELETE</button>
+    </form>
+    <hr>
+    <a href="/collegeQuora/<%= reqQuestion._id %>/edit">Edit this Question</a>
 </body>
 </html>
