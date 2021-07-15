@@ -5,6 +5,7 @@ const AnswerSchema = new Schema({
     answer: String,
     date: String,
     author: String,
+    authorId: String,
     upVotes: Number,
     downVotes: Number,
 })

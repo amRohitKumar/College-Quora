@@ -5,6 +5,7 @@ const QuestionSchema = new Schema({
     question: String,
     date: String,
     author: String,
+    authorId : String,
     answers : [
         {
             type: Schema.Types.ObjectId,

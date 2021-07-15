@@ -4,16 +4,19 @@ const catchAsync = require('../utils/catchAsync');
 const Answer = require('../models/answers');
 const Question = require('../models/questions');
 const ExpressError = require('../utils/ExpressError');
-const { validateAnswer, isLoggedIn, validateQuestion} = require('../utils/middleware');
+const { validateAnswer, isLoggedIn, authorizeAnswer} = require('../utils/middleware');
 const {DateAndMonth} = require('../utils/helperFunction');
 
 router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, res) => {
     const ID = req.params.id;
     const answer = req.body.answer;
+    const author = req.user.name;
+    const authorId = req.user._id;
     const currentDate = DateAndMonth();
     // res.send("ya ya not bad !!!");
     const reqQuestion = await Question.findById(ID);
-    const newAnswer = new Answer({answer: answer, date: currentDate});
+    console.log(req.user);
+    const newAnswer = new Answer({answer: answer, date: currentDate, author : author, authorId : authorId});
     reqQuestion.answers.push(newAnswer);
     await newAnswer.save();
     await reqQuestion.save();
@@ -21,16 +24,9 @@ router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, r
 }))
 
 
-router.put('/:id/edit', isLoggedIn, validateQuestion, catchAsync( async (req, res) => {
-    const newQuestion = req.body.question.question;
-    // console.log(newQuestion);
-    const ID = req.params.id;
-    const updatedQuestion = await Question.findByIdAndUpdate(ID, {question: newQuestion});
-    res.redirect(`/collegeQuora/${ID}`);
-    // res.send('you got me');
-}))
 
-router.delete('/:id/review/:a_id/delete', isLoggedIn,catchAsync( async(req, res) => {
+
+router.delete('/:id/review/:a_id/delete', isLoggedIn, authorizeAnswer, catchAsync( async(req, res) => {
 
     const {id, a_id} = req.params;
     const reqAnswer = await Answer.findByIdAndDelete(a_id);

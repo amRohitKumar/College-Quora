@@ -3,7 +3,7 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const Question = require('../models/questions');
 const ExpressError = require('../utils/ExpressError');
-const {validateQuestion, questionDeleteMiddleware, isLoggedIn} = require('../utils/middleware');
+const {validateQuestion, questionDeleteMiddleware, isLoggedIn, authorizeQuestion} = require('../utils/middleware');
 const {DateAndMonth} = require('../utils/helperFunction');
 
 router.get('/', catchAsync( async (req, res) => {
@@ -19,7 +19,9 @@ router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, ne
     
     const question = req.body.question
     const currentDate = DateAndMonth();
-    const newQuestion = new Question({question: question.question, date: currentDate});
+    const author = req.user.name;
+    const authorId = req.user._id;
+    const newQuestion = new Question({question: question.question, date: currentDate, author : author, authorId: authorId});
     await newQuestion.save();
     req.flash('success', 'Successfully added a new Question !');
     res.redirect(`/collegeQuora/${newQuestion._id}`);
@@ -40,12 +42,21 @@ router.get('/:id', catchAsync( async (req, res) => {
     res.render('questions/show', {reqQuestion});
 }))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+
+router.get('/:id/edit', isLoggedIn, authorizeQuestion ,catchAsync(async (req, res) => {
     const reqQuestion = await Question.findById(req.params.id);
     res.render('questions/edit', {reqQuestion});
 }))
 
-router.delete('/:id', isLoggedIn, questionDeleteMiddleware ,catchAsync( async (req, res) => {
+router.put('/:id/edit', isLoggedIn, authorizeQuestion , validateQuestion,catchAsync( async (req, res) => {
+    
+    const newQuestion = req.body.question.question;
+    const ID = req.params.id;
+    const updatedQuestion = await Question.findByIdAndUpdate(ID, {question: newQuestion});
+    res.redirect(`/collegeQuora/${ID}`);
+}))
+
+router.delete('/:id', isLoggedIn, authorizeQuestion , questionDeleteMiddleware ,catchAsync( async (req, res) => {
     const ID = req.params.id;
     await Question.findByIdAndDelete(ID);
     res.redirect('/collegeQuora');

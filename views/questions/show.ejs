@@ -4,10 +4,12 @@
 <hr>
 <a href="/collegeQuora/">Index Page</a>
 <hr>
-<form action="/collegeQuora/<%= reqQuestion._id %>?_method=DELETE" method="POST" class="container d-flex justify-content-center align-items-center">
-    <button class="btn btn-danger mx-3">DELETE</button>
-    <a href="/collegeQuora/<%= reqQuestion._id %>/edit" class="btn btn-primary" role="button">Edit</a>
-</form>
+<% if( currentUser && reqQuestion.authorId == currentUser._id){ %> 
+    <form action="/collegeQuora/<%= reqQuestion._id %>?_method=DELETE" method="POST" class="container d-flex justify-content-center align-items-center">
+        <button class="btn btn-danger mx-3">DELETE</button>
+        <a href="/collegeQuora/<%= reqQuestion._id %>/edit" class="btn btn-primary" role="button">Edit</a>
+    </form>
+<% } %> 
 <hr>
 <div class="container row">
     <div class=" container col-5 offset-1" >
@@ -33,11 +35,13 @@
             <div class="card my-2">
                 <div class="card-body">
                     <%= ans.answer %> 
-                    <form action="/collegeQuora/<%= reqQuestion._id %>/review/<%= ans._id %>/delete?_method=DELETE" method="POST">
-                        <div class="container d-flex justify-content-end align-items-center">
-                            <button class="btn btn-danger btn-sm">DELETE</button>
-                        </div>
-                    </form>
+                    <% if( currentUser && currentUser._id == ans.authorId){ %> 
+                        <form action="/collegeQuora/<%= reqQuestion._id %>/review/<%= ans._id %>/delete?_method=DELETE" method="POST">
+                            <div class="container d-flex justify-content-end align-items-center">
+                                <button class="btn btn-danger btn-sm">DELETE</button>
+                            </div>
+                        </form>
+                    <% } %> 
                 </div>
             </div>
         <% } %> 

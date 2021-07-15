@@ -53,3 +53,22 @@ module.exports.isLoggedIn = (req, res, next) => {
     }
     next();
 }
+
+module.exports.authorizeAnswer = async (req, res, next) => {
+    const {a_id} = req.params;
+    const reqAnswer = await Answer.findById(a_id);
+    if(!(req.user._id == reqAnswer.authorId)){
+        req.flash('error', "You are not authorized to do this !");
+        return res.redirect(`/collegeQuora/${req.params.id}`);
+    }
+    next();
+}
+
+module.exports.authorizeQuestion = async (req, res, next) => {
+    const reqQuestion = await Question.findById(req.params.id);
+    if(!(req.user._id == reqQuestion.authorId)){
+        req.flash('error', "You are not authorized to do this !");
+        return res.redirect(`/collegeQuora/${req.params.id}`);
+    }
+    next();
+}
