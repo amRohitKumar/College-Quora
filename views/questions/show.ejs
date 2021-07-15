@@ -1,11 +1,45 @@
 <% layout('layouts/boilerplate') -%>
 <h1>Show page</h1>
 <%= reqQuestion.question %>
-    <hr>
-    <a href="/collegeQuora/">Index Page</a>
-    <hr>
-    <form action="/collegeQuora/<%= reqQuestion._id %>?_method=DELETE" method="POST">
-        <button>DELETE</button>
-    </form>
-    <hr>
-    <a href="/collegeQuora/<%= reqQuestion._id %>/edit">Edit this Question</a>
+<hr>
+<a href="/collegeQuora/">Index Page</a>
+<hr>
+<form action="/collegeQuora/<%= reqQuestion._id %>?_method=DELETE" method="POST" class="container d-flex justify-content-center align-items-center">
+    <button class="btn btn-danger mx-3">DELETE</button>
+    <a href="/collegeQuora/<%= reqQuestion._id %>/edit" class="btn btn-primary" role="button">Edit</a>
+</form>
+<hr>
+<div class="container row">
+    <div class=" container col-5 offset-1" >
+        <h3>Add answers : </h3>
+        <form action="/collegeQuora/<%= reqQuestion._id %>/review" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="answer">Answers :</label>
+                <textarea class="form-control" name="answer" id="answer" cols="15" rows="3" required ></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please enter a valid answer.
+                </div>
+            </div>
+            <div class="container d-flex justify-content-center align-items-center">
+                <button class="btn btn-success ">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class=" container col-5 offset-1 mt-5" >
+        <% for(let ans of reqQuestion.answers){ %> 
+            <div class="card my-2">
+                <div class="card-body">
+                    <%= ans.answer %> 
+                    <form action="/collegeQuora/<%= reqQuestion._id %>/review/<%= ans._id %>/delete?_method=DELETE" method="POST">
+                        <div class="container d-flex justify-content-end align-items-center">
+                            <button class="btn btn-danger btn-sm">DELETE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        <% } %> 
+    </div>
+</div>

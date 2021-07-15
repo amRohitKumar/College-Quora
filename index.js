@@ -12,8 +12,8 @@ const Question = require('./models/questions');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const Joi = require('joi');
-const {questionSchema} = require('./JOImodels/schema');
-
+const {questionSchema, answerSchema} = require('./JOImodels/schema');
+const Answer = require('./models/answers');
 
 
 const PORT = 8080;
@@ -61,6 +61,29 @@ const validateQuestion = (req, res, next) => {
     }
 }
 
+const validateAnswer = (req, res, next) => {
+    
+    const {error} = answerSchema.validate(req.body);
+
+    if(error){
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }else{
+        next();
+    }
+}
+
+const questionDeleteMiddleware = async (req, res, next) => {
+    const {id} = req.params;
+    const reqQuestion = await Question.findById(id);
+    // console.log(reqQuestion);
+    for(let ans of reqQuestion.answers){
+        await Answer.findByIdAndDelete(ans);
+    }
+    next();
+}
+
+
 const DateAndMonth = () => {
     const d = new Date();
     const date = d.getDate();
@@ -104,8 +127,7 @@ app.post('/collegeQuora/new', validateQuestion, catchAsync( async(req, res, next
 app.get('/collegeQuora/:id', catchAsync( async (req, res) => {
     const ID = req.params.id;
     // console.log(ID);
-    const reqQuestion = await Question.findById(ID);
-    // res.send(ID);
+    const reqQuestion = await Question.findById(ID).populate('answers');
     res.render('questions/show', {reqQuestion});
 }))
 
@@ -123,11 +145,33 @@ app.put('/collegeQuora/:id/edit', validateQuestion, catchAsync( async (req, res)
     // res.send('you got me');
 }))
 
-app.delete('/collegeQuora/:id', catchAsync( async (req, res) => {
+app.post('/collegeQuora/:id/review',validateAnswer, catchAsync( async (req, res) => {
+    const ID = req.params.id;
+    const answer = req.body.answer;
+    const currentDate = DateAndMonth();
+    // res.send("ya ya not bad !!!");4
+    const reqQuestion = await Question.findById(ID);;
+    const newAnswer = new Answer({answer: answer, date: currentDate});
+    reqQuestion.answers.push(newAnswer);
+    await newAnswer.save();
+    await reqQuestion.save();
+    res.redirect(`/collegeQuora/${ID}`);
+}))
+
+app.delete('/collegeQuora/:id/review/:a_id/delete', catchAsync( async(req, res) => {
+
+    const {id, a_id} = req.params;
+    const reqAnswer = await Answer.findByIdAndDelete(a_id);
+    res.redirect(`/collegeQuora/${id}`);
+
+}))
+
+app.delete('/collegeQuora/:id',questionDeleteMiddleware ,catchAsync( async (req, res) => {
     const ID = req.params.id;
     await Question.findByIdAndDelete(ID);
     res.redirect('/collegeQuora');
 }))
+
 
 app.all('*', (req, res, next) => {
     next(new ExpressError("Page not found !", 404));
