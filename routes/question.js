@@ -12,7 +12,8 @@ router.get('/', catchAsync( async (req, res) => {
 }))
 
 router.get('/new', isLoggedIn,  (req, res) => {
-    res.render('questions/new');
+    // res.render('questions/new');
+    res.redirect('/collegeQuora');
 })
 
 router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, next) => {

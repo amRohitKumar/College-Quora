@@ -1,9 +1,10 @@
 <% layout('layouts/boilerplate') -%>
-<h1>Show page</h1>
-<%= reqQuestion.question %>
+
+<div class="my-3">
+    <span class="h2 font-weight-bold "> <%= reqQuestion.question %> </span>
+</div>
 <hr>
-<a href="/collegeQuora/">Index Page</a>
-<hr>
+
 <% if( currentUser && reqQuestion.authorId == currentUser._id){ %> 
     <form action="/collegeQuora/<%= reqQuestion._id %>?_method=DELETE" method="POST" class="container d-flex justify-content-center align-items-center">
         <button class="btn btn-danger mx-3">DELETE</button>
