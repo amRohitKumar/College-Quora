@@ -8,16 +8,13 @@ const passport = require('passport');
 const localStrategy = require('passport-local');
 const flash = require('connect-flash');
 const session = require('express-session');
-const Question = require('./models/questions');
 
 const ExpressError = require('./utils/ExpressError');
-const Joi = require('joi');
-const {questionSchema, answerSchema} = require('./JOImodels/schema');
-const Answer = require('./models/answers');
 
-const question = require('./routes/question');
-const answer = require('./routes/answer');
-
+const QuestionRoutes = require('./routes/question');
+const AnswerRoutes = require('./routes/answer');
+const UserRoutes = require('./routes/user');
+const User = require('./models/user');
 
 
 
@@ -59,18 +56,26 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
+    console.log(req.session);
     res.locals.success = req.flash("success");
-    console.log(req.flash('success'));
     res.locals.error = req.flash('error');
+    res.locals.currentUser = req.user;
     next();
 })
 
 
-app.use('/collegeQuora', question);
-app.use('/collegeQuora', answer);
 
+app.use('/collegeQuora', QuestionRoutes);
+app.use('/collegeQuora', AnswerRoutes);
+app.use('/', UserRoutes);
 
 
 

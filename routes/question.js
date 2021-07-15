@@ -3,7 +3,7 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const Question = require('../models/questions');
 const ExpressError = require('../utils/ExpressError');
-const {validateQuestion, questionDeleteMiddleware, validateAnswer} = require('../utils/middleware');
+const {validateQuestion, questionDeleteMiddleware, isLoggedIn} = require('../utils/middleware');
 const {DateAndMonth} = require('../utils/helperFunction');
 
 router.get('/', catchAsync( async (req, res) => {
@@ -11,11 +11,11 @@ router.get('/', catchAsync( async (req, res) => {
     res.render('questions/index', {questions});
 }))
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn,  (req, res) => {
     res.render('questions/new');
 })
 
-router.post('/new', validateQuestion, catchAsync( async(req, res, next) => {
+router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, next) => {
     
     const question = req.body.question
     const currentDate = DateAndMonth();
@@ -40,21 +40,12 @@ router.get('/:id', catchAsync( async (req, res) => {
     res.render('questions/show', {reqQuestion});
 }))
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const reqQuestion = await Question.findById(req.params.id);
     res.render('questions/edit', {reqQuestion});
 }))
 
-router.put('/:id/edit', validateQuestion, catchAsync( async (req, res) => {
-    const newQuestion = req.body.question.question;
-    // console.log(newQuestion);
-    const ID = req.params.id;
-    const updatedQuestion = await Question.findByIdAndUpdate(ID, {question: newQuestion});
-    res.redirect(`/collegeQuora/${ID}`);
-    // res.send('you got me');
-}))
-
-router.delete('/:id',questionDeleteMiddleware ,catchAsync( async (req, res) => {
+router.delete('/:id', isLoggedIn, questionDeleteMiddleware ,catchAsync( async (req, res) => {
     const ID = req.params.id;
     await Question.findByIdAndDelete(ID);
     res.redirect('/collegeQuora');

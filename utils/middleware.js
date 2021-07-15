@@ -37,3 +37,19 @@ module.exports.validateAnswer = (req, res, next) => {
         next();
     }
 }
+
+module.exports.isLoggedIn = (req, res, next) => {
+    if(!req.isAuthenticated()){
+        // console.log("start");
+        // console.log(req);
+        // console.log(req.originalUrl);
+        // console.log(req.method);
+        // console.log(req.params);
+        req.session.returnTo = req.originalUrl;
+        req.session.prevMethod = req.method;
+        req.session.prevID = req.params.id;
+        req.flash('error', 'You must be signed in first !');
+        return res.redirect('/login');
+    }
+    next();
+}
