@@ -103,7 +103,7 @@ passport.use(
         {
             clientID: clientID,
             clientSecret: clientSecret,
-            callbackURL: "/login/google/redirect"
+            callbackURL: "/collegeQuora"
         }, (accessToken, refreshToken, profile, done) => {
             // console.log(profile);
             const displayName = profile.displayName

@@ -12,6 +12,11 @@ const UserSchema = new Schema({
     }
 })
 
+userSchema.plugin(passportLocalMongoose, {
+    usernameUnique: false,
+});
+
+
 UserSchema.plugin(passportLocalMongoose);
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

@@ -31,14 +31,12 @@ router.get('/login', (req, res) => {
 
 router.get("/login/google", passport.authenticate("google", {scope: ["profile", "email"]}));
 
-router.get("/login/google/redirect", passport.authenticate('google', {failureRedirect: '/register'}), async (req, res) => {
-    let userId = req.user._id;
-    const name = req.user.name;
-    req.session.currentUser = req.user;
-    req.session.bypass = true;
-    req.flash('success', `Welcome to College-Quora ${name}`)
-    res.redirect(`/collegeQuora`);
-});
+// router.get("/login/google/redirect", passport.authenticate('google', {failureRedirect: '/register'}), async (req, res) => {
+//     let userId = req.user._id;
+//     const name = req.user.name;
+//     req.flash('success', `Welcome to College-Quora ${name}`)
+//     res.redirect(`/collegeQuora`);
+// });
 
 
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), catchAsync(async (req, res) => {
@@ -55,9 +53,9 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
 
 router.get('/logout', (req, res) => {
     req.session.bypass = false;
-    req.session.currentUser = null;
+    const userName = req.user.name;
     req.logout();
-    req.flash('success', `Goodbye ${req.user.name} !`);
+    req.flash('success', `Goodbye ${userName} !`);
     res.redirect('/');
 })
 
