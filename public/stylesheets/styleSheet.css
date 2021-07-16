@@ -21,4 +21,38 @@
   background-color: transparent;
   text-decoration: none;
 }
- 
+
+.darkmode--activated #newQuestionBlock {
+  background-color: #2d2d2d2a;
+}
+
+.darkmode--activated #infoBlock{
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid red;
+}
+
+/* .darkmode--activated #questionBlock {
+  background-color: #1d1d1d;
+}
+
+.darkmode--activated .mainQuestions a:link {
+  color: #b6a1cf !important;
+}
+
+.darkmode--activated a:visited {
+  color: #503607;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.darkmode--activated .mainQuestions a:hover {
+  color: #503607;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.darkmode--activated .mainQuestions a:active {
+  color: #503607;
+  background-color: transparent;
+  text-decoration: none;
+} */

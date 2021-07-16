@@ -5,14 +5,18 @@
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav ml-auto">
-                <a class="nav-link active" aria-current="page" href="/collegeQuora">Home</a>
+        <div class=" container collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="container navbar-nav" >
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                <a class="nav-link active" aria-current="page" href="/collegeQuora">All Questions</a>
+            </div>
+            
+            <div class=" container d-flex justify-content-end">
                 <% if(!currentUser){ %> 
-                <a class="nav-link active" aria-current="page" href="/register">Register</a>
-                <a class="nav-link active" href="/login">Sign-In</a>
+                    <a class="nav-link active" aria-current="page" href="/register">Register</a>
+                    <a class="nav-link active" href="/login">Sign-In</a>
                 <% }else{%> 
-                <a href="/logout" class="nav-link active" aria-current="page">Logout</a>
+                    <a href="/logout" class="nav-link active" aria-current="page">Logout</a>
                 <% } %> 
             </div>
         </div>

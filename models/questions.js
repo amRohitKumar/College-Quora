@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const QuestionSchema = new Schema({
     question: String,
     date: String,
+    time: String,
     author: String,
     authorId : String,
     answers : [

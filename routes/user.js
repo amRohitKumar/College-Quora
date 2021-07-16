@@ -33,11 +33,11 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
 
     req.flash('success', 'Welcome back !');
     let redirectUrl = req.session.returnTo || '/collegeQuora';
-    const prevMethod = req.session.prevMethod;
-    if(prevMethod === "POST" || prevMethod === "DELETE"){
-        redirectUrl = `/collegeQuora/${req.session.prevID}`;
-    }
-    res.redirect(redirectUrl);
+    // const prevMethod = req.session.prevMethod;
+    // if(prevMethod === "POST" || prevMethod === "DELETE"){
+    //     redirectUrl = `/collegeQuora/${req.session.prevID}`;
+    // }
+    res.redirect('/collegeQuora');
 }))
 
 

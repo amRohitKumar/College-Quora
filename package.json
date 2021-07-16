@@ -19,6 +19,7 @@
   "homepage": "https://github.com/shutupRohit/College-Quora#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
+    "darkmode-js": "^1.5.7",
     "ejs": "^3.1.6",
     "ejs-mate": "^3.0.0",
     "express": "^4.17.1",

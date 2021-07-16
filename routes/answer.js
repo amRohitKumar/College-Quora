@@ -20,6 +20,7 @@ router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, r
     reqQuestion.answers.push(newAnswer);
     await newAnswer.save();
     await reqQuestion.save();
+    req.flash('success', 'Added new answer !');
     res.redirect(`/collegeQuora/${ID}`);
 }))
 
@@ -30,6 +31,7 @@ router.delete('/:id/review/:a_id/delete', isLoggedIn, authorizeAnswer, catchAsyn
 
     const {id, a_id} = req.params;
     const reqAnswer = await Answer.findByIdAndDelete(a_id);
+    req.flash('success', 'Answer deleted !');
     res.redirect(`/collegeQuora/${id}`);
 
 }))

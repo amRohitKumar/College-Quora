@@ -16,6 +16,11 @@ const AnswerRoutes = require('./routes/answer');
 const UserRoutes = require('./routes/user');
 const User = require('./models/user');
 
+const Darkmode = require('darkmode-js');
+
+
+
+
 
 
 const PORT = 8080;
@@ -63,6 +68,25 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+const options = {
+    bottom: '64px', // default: '32px'
+    right: '32px', // default: '32px'
+    left: 'unset', // default: 'unset'
+    time: '0.3s', // default: '0.3s'
+    mixColor: '#292929', // default: '#fff'
+    backgroundColor: '#292929',  // default: '#fff'
+    buttonColorDark: '#100f2c',  // default: '#100f2c'
+    buttonColorLight: '#fff', // default: '#fff'
+    saveInCookies: true, // default: true,
+    label: '🌗', // default: ''
+    autoMatchOsTheme: true // default: true
+}
+
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+
+
+
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash('error');
@@ -71,7 +95,10 @@ app.use((req, res, next) => {
     next();
 })
 
-
+app.get('/', (req, res) => {
+    // res.send("home page");
+    res.render('homePage');
+})
 
 app.use('/collegeQuora', QuestionRoutes);
 app.use('/collegeQuora', AnswerRoutes);

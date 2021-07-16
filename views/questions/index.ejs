@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') -%>
 
-<div class="border mt-4 p-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<div id="newQuestionBlock" class="border mt-4 p-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <% if(currentUser){ %> 
         <div class="container text-secondary">
             <%= currentUser.name %> 
@@ -48,13 +48,13 @@
 
 <hr>
 <% for(let q of questions){ %>
-    <div class="card my-2 p-1">
+    <div id="questionBlock" class="card my-2 p-1">
         <div class="card-body">
             <span class="h6 card-title text-capitalize font-weight-bold">
                 <%= q.author%>  
             </span>
             <span class="blockquote-footer"> Asked on  <%= q.date %> </span>
-            <div class="mainQuestions">
+            <div id="mainQuestion" class="mainQuestions">
                 <a href="/collegeQuora/<%= q._id %>" class="card-text lead text-decoration-none">
                     <%= q.question %> 
                 </a>

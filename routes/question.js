@@ -4,25 +4,26 @@ const catchAsync = require('../utils/catchAsync');
 const Question = require('../models/questions');
 const ExpressError = require('../utils/ExpressError');
 const {validateQuestion, questionDeleteMiddleware, isLoggedIn, authorizeQuestion} = require('../utils/middleware');
-const {DateAndMonth} = require('../utils/helperFunction');
+const {DateAndMonth, Time} = require('../utils/helperFunction');
 
 router.get('/', catchAsync( async (req, res) => {
     const questions = await Question.find({});
     res.render('questions/index', {questions});
 }))
 
-router.get('/new', isLoggedIn,  (req, res) => {
-    // res.render('questions/new');
-    res.redirect('/collegeQuora');
-})
+// router.get('/new', isLoggedIn,  (req, res) => {
+//     // res.render('questions/new');
+//     res.redirect('/collegeQuora');
+// })
 
 router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, next) => {
     
     const question = req.body.question
     const currentDate = DateAndMonth();
+    const currentTime = Time();
     const author = req.user.name;
     const authorId = req.user._id;
-    const newQuestion = new Question({question: question.question, date: currentDate, author : author, authorId: authorId});
+    const newQuestion = new Question({question: question.question, date: currentDate, author : author, authorId: authorId, time: currentTime});
     await newQuestion.save();
     req.flash('success', 'Successfully added a new Question !');
     res.redirect(`/collegeQuora/${newQuestion._id}`);
@@ -44,10 +45,10 @@ router.get('/:id', catchAsync( async (req, res) => {
 }))
 
 
-router.get('/:id/edit', isLoggedIn, authorizeQuestion ,catchAsync(async (req, res) => {
-    const reqQuestion = await Question.findById(req.params.id);
-    res.render('questions/edit', {reqQuestion});
-}))
+// router.get('/:id/edit', isLoggedIn, authorizeQuestion ,catchAsync(async (req, res) => {
+//     const reqQuestion = await Question.findById(req.params.id);
+//     res.render('questions/edit', {reqQuestion});
+// }))
 
 router.put('/:id/edit', isLoggedIn, authorizeQuestion , validateQuestion,catchAsync( async (req, res) => {
     
