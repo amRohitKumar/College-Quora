@@ -12,7 +12,7 @@ const UserSchema = new Schema({
     }
 })
 
-userSchema.plugin(passportLocalMongoose, {
+UserSchema.plugin(passportLocalMongoose, {
     usernameUnique: false,
 });
 
