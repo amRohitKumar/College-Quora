@@ -158,15 +158,15 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/', (req, res) => {
-    // res.send("home page");
-    res.render('homePage');
-})
 
 app.use('/collegeQuora', QuestionRoutes);
 app.use('/collegeQuora', AnswerRoutes);
 app.use('/', UserRoutes);
 
+app.get('/', (req, res) => {
+    // res.send("home page");
+    res.render('homePage');
+})
 
 
 app.all('*', (req, res, next) => {
