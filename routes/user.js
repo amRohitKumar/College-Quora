@@ -36,8 +36,8 @@ router.get("/login/google/redirect", passport.authenticate('google', {failureRed
     const name = req.user.name;
     req.session.currentUser = req.user;
     req.session.bypass = true;
-    req.flash('success', `Welcome to Notes-App ${name}`)
-    res.redirect(`/notes/${userId}`);
+    req.flash('success', `Welcome to College-Quora ${name}`)
+    res.redirect(`/collegeQuora`);
 });
 
 
