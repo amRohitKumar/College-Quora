@@ -7,7 +7,7 @@ const ExpressError = require('../utils/ExpressError');
 const { validateAnswer, isLoggedIn, authorizeAnswer} = require('../utils/middleware');
 const {DateAndMonth} = require('../utils/helperFunction');
 
-router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, res) => {
+router.post('/collegeQuora/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, res) => {
     const ID = req.params.id;
     const answer = req.body.answer;
     const author = req.user.name;
@@ -27,7 +27,7 @@ router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, r
 
 
 
-router.delete('/:id/review/:a_id/delete', isLoggedIn, authorizeAnswer, catchAsync( async(req, res) => {
+router.delete('/collegeQuora/:id/review/:a_id/delete', isLoggedIn, authorizeAnswer, catchAsync( async(req, res) => {
 
     const {id, a_id} = req.params;
     const reqAnswer = await Answer.findByIdAndDelete(a_id);

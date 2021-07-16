@@ -159,8 +159,8 @@ app.use((req, res, next) => {
 })
 
 
-app.use('/collegeQuora', QuestionRoutes);
-app.use('/collegeQuora', AnswerRoutes);
+app.use('/', QuestionRoutes);
+app.use('/', AnswerRoutes);
 app.use('/', UserRoutes);
 
 app.get('/', (req, res) => {

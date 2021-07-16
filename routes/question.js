@@ -6,7 +6,7 @@ const ExpressError = require('../utils/ExpressError');
 const {validateQuestion, questionDeleteMiddleware, isLoggedIn, authorizeQuestion} = require('../utils/middleware');
 const {DateAndMonth, Time} = require('../utils/helperFunction');
 
-router.get('/', catchAsync( async (req, res) => {
+router.get('/collegeQuora', catchAsync( async (req, res) => {
     const questions = await Question.find({});
     res.render('questions/index', {questions});
 }))
@@ -16,7 +16,7 @@ router.get('/', catchAsync( async (req, res) => {
 //     res.redirect('/collegeQuora');
 // })
 
-router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, next) => {
+router.post('/collegeQuora/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, next) => {
     
     const question = req.body.question
     const currentDate = DateAndMonth();
@@ -30,7 +30,7 @@ router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, ne
 
 }))
 
-router.get('/:id', catchAsync( async (req, res) => {
+router.get('/collegeQuora/:id', catchAsync( async (req, res) => {
     const ID = req.params.id;
     // console.log(ID);
     const reqQuestion = await Question.findById(ID).populate('answers');
@@ -50,7 +50,7 @@ router.get('/:id', catchAsync( async (req, res) => {
 //     res.render('questions/edit', {reqQuestion});
 // }))
 
-router.put('/:id/edit', isLoggedIn, authorizeQuestion , validateQuestion,catchAsync( async (req, res) => {
+router.put('/collegeQuora/:id/edit', isLoggedIn, authorizeQuestion , validateQuestion,catchAsync( async (req, res) => {
     
     const newQuestion = req.body.question.question;
     const ID = req.params.id;
@@ -58,7 +58,7 @@ router.put('/:id/edit', isLoggedIn, authorizeQuestion , validateQuestion,catchAs
     res.redirect(`/collegeQuora/${ID}`);
 }))
 
-router.delete('/:id', isLoggedIn, authorizeQuestion , questionDeleteMiddleware ,catchAsync( async (req, res) => {
+router.delete('/collegeQuora/:id', isLoggedIn, authorizeQuestion , questionDeleteMiddleware ,catchAsync( async (req, res) => {
     const ID = req.params.id;
     await Question.findByIdAndDelete(ID);
     res.redirect('/collegeQuora');
