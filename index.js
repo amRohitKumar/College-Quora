@@ -13,7 +13,7 @@ const localStrategy = require('passport-local');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const flash = require('connect-flash');
 const session = require('express-session');
-
+const mongoSanitize = require('express-mongo-sanitize');
 const ExpressError = require('./utils/ExpressError');
 
 const QuestionRoutes = require('./routes/question');
@@ -26,8 +26,10 @@ const Darkmode = require('darkmode-js');
 
 const PORT = process.env.PORT || 8080;
 
-// const dbUrl = process.env.DB_URL ;
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/collegeQuora'
+const clientID = process.env.CLIENTID;
+const clientSecret = process.env.CLIENTSECRET;
+const dbUrl =  'mongodb://localhost:27017/collegeQuora';
+// const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/collegeQuora'
 const SECRET = process.env.SECRET || 'thisisasecret';
 
 mongoose.connect(dbUrl, {
@@ -85,6 +87,49 @@ passport.use(new localStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+    User.findById(id).then(user => {
+      done(null, user);
+    });
+});
+
+
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: clientID,
+            clientSecret: clientSecret,
+            callbackURL: "/login/google/redirect"
+        }, (accessToken, refreshToken, profile, done) => {
+            // console.log(profile);
+            const displayName = profile.displayName
+            const emailId = profile.emails[0].value;
+            // passport callback function
+            //check if user already exists in our db with the given profile ID
+            User.findOne({ googleId: profile.id }).then((currentUser) => {
+                if (currentUser) {
+                    //if we already have a record with the given profile ID
+                    done(null, currentUser);
+                } else {
+                    //if not, create a new user 
+                    new User({
+                        googleId: profile.id,
+                        name: displayName,
+                        emailId: emailId,
+                        username: emailId,
+                    }).save().then((newUser) => {
+                        done(null, newUser);
+                    });
+                }
+            })
+        })
+);
+
+app.use(mongoSanitize());
 
 const options = {
     bottom: '64px', // default: '32px'
