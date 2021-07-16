@@ -103,27 +103,27 @@ passport.use(
         {
             clientID: clientID,
             clientSecret: clientSecret,
-            callbackURL: "/collegeQuora"
+            callbackURL: "/login/google/redirect"
         }, (accessToken, refreshToken, profile, done) => {
             // console.log(profile);
             const displayName = profile.displayName
             const emailId = profile.emails[0].value;
             // passport callback function
             //check if user already exists in our db with the given profile ID
-            User.findOne({ googleId: profile.id }).then((currentUser) => {
+            User.findOne({ googleId: profile.id }).then(async (currentUser) => {
                 if (currentUser) {
                     //if we already have a record with the given profile ID
                     done(null, currentUser);
                 } else {
                     //if not, create a new user 
-                    new User({
+                    const registeredUser = new User({
                         googleId: profile.id,
                         name: displayName,
                         emailId: emailId,
                         username: emailId,
-                    }).save().then((newUser) => {
-                        done(null, newUser);
                     });
+                    await registeredUser.save();
+                    await done(null, registeredUser);
                 }
             })
         })

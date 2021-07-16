@@ -12,7 +12,7 @@ router.post('/register', catchAsync(async (req, res) => {
     try {
         const { name, username, email, password } = req.body;
         const newUser = new User({ name: name, emailId: email, username: username });
-        registerdUser = await User.register(newUser, password);
+        const registerdUser = await User.register(newUser, password);
         req.login(registerdUser, err => {
             if(err) return next(err);
             req.flash('success', `Welcome to College-Quora ${req.user.name}!`);
@@ -31,12 +31,14 @@ router.get('/login', (req, res) => {
 
 router.get("/login/google", passport.authenticate("google", {scope: ["profile", "email"]}));
 
-// router.get("/login/google/redirect", passport.authenticate('google', {failureRedirect: '/register'}), async (req, res) => {
-//     let userId = req.user._id;
-//     const name = req.user.name;
-//     req.flash('success', `Welcome to College-Quora ${name}`)
-//     res.redirect(`/collegeQuora`);
-// });
+router.get("/login/google/redirect", passport.authenticate('google', {failureRedirect: '/register'}), async (req, res) => {
+    console.log('before');
+    console.log(req.user);
+    let userId = req.user._id;
+    const name = req.user.name;
+    req.flash('success', `Welcome to College-Quora ${name}`)
+    res.redirect(`/collegeQuora`);
+});
 
 
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), catchAsync(async (req, res) => {
