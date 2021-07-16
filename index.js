@@ -24,7 +24,7 @@ const MongoStore = require('connect-mongo');
 const Darkmode = require('darkmode-js');
 
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 // const dbUrl = process.env.DB_URL ;
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/collegeQuora'
@@ -121,26 +121,6 @@ app.get('/', (req, res) => {
 app.use('/collegeQuora', QuestionRoutes);
 app.use('/collegeQuora', AnswerRoutes);
 app.use('/', UserRoutes);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
