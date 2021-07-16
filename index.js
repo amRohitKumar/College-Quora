@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== "production"){
+    require('dotenv').config();
+}
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -6,6 +10,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const passport = require('passport');
 const localStrategy = require('passport-local');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const flash = require('connect-flash');
 const session = require('express-session');
 
@@ -15,18 +20,17 @@ const QuestionRoutes = require('./routes/question');
 const AnswerRoutes = require('./routes/answer');
 const UserRoutes = require('./routes/user');
 const User = require('./models/user');
-
+const MongoStore = require('connect-mongo');
 const Darkmode = require('darkmode-js');
-
-
-
-
 
 
 const PORT = 8080;
 
+// const dbUrl = process.env.DB_URL ;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/collegeQuora'
+const SECRET = process.env.SECRET || 'thisisasecret';
 
-mongoose.connect('mongodb://localhost:27017/collegeQuora', {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -48,8 +52,21 @@ app.use(express.urlencoded({extended: true})) // to parse the req.post body
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public'))); //serving public directory
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret: SECRET,
+    touchAfter: 24 * 60 * 60
+})
+
+store.on('error', function (e) {
+    console.log("SESSION STORE ERROR", e);
+})
+
+
 const sessionConfig = {
-    secret: 'badsecret',
+    store,
+    name: 'session',
+    secret: SECRET,
     resave: false,
     saveUninitialized: true,
     cookie : {
@@ -58,6 +75,7 @@ const sessionConfig = {
         httpOnly: true,
     }
 }
+
 app.use(session(sessionConfig));
 app.use(flash());
 

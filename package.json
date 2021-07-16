@@ -19,7 +19,9 @@
   "homepage": "https://github.com/shutupRohit/College-Quora#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.4.1",
     "darkmode-js": "^1.5.7",
+    "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "ejs-mate": "^3.0.0",
     "express": "^4.17.1",
@@ -28,6 +30,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^5.13.2",
     "passport": "^0.4.1",
+    "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.1.0"
   }
