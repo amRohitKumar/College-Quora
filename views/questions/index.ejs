@@ -45,8 +45,14 @@
 </div>
 <% } %>  
 
-
 <hr>
+
+<% if(questions.length === 0){ %> 
+    <div class="alert alert-warning mt-3" role="alert" style="text-align: center;">
+        No Questions to show !
+    </div>
+<% } %> 
+
 <% for(let q of questions){ %>
     <div id="questionBlock" class="card my-2 p-1">
         <div class="card-body">

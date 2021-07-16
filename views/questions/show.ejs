@@ -89,16 +89,72 @@
 <% for(let ans of reqQuestion.answers){ %> 
     <div class="card my-2 rounded">
         <div class="card-body">
-            <h6 class="card-title font-weight-bold"> <%= ans.author %>  <span class="blockquote-footer"> Answered <%= ans.date %> </span></h6>
-            <%= ans.answer %> 
-
-            <% if( currentUser && currentUser._id == ans.authorId){ %> 
-                <form action="/collegeQuora/<%= reqQuestion._id %>/review/<%= ans._id %>/delete?_method=DELETE" method="POST">
-                    <div class="container d-flex justify-content-end align-items-center">
-                        <button class="btn btn-danger btn-sm">DELETE</button>
+            <div class="container d-flex align-items-top" style="justify-content: space-between;">
+                <h6 class="card-title font-weight-bold"> <%= ans.author %>  <span class="blockquote-footer"> Answered<%= ans.date %> </span></h6>
+     
+                <% if( currentUser && currentUser._id == ans.authorId){ %>  
+                    <div class="btn-group">
+                        <button class="btn btn-white btn-sm" type="button"data-bs-toggle="dropdown"aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <button type="button" class="btn btn-white btn-sm "data-bs-toggle="modal"data-bs-target="#editBtn">
+                                    Edit
+                                </button>
+                            </li>
+                            <li class="border-2 border-top">
+                                <form action="/collegeQuora/<%=reqQuestion._id%>/review/<%= ans._id %>/delete?_method=DELETE" method="POST">
+                                    <button class="btn btn-white btn-sm" style="width: fit-content;">Delete</button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
-                </form>
-            <% } %> 
+
+                    <!-- Modal for editing answers -->
+                    <div class="modal fade" id="editBtn" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Edit answer -</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="my-3 mx-3 validated-form" action="/collegeQuora/<%=reqQuestion._id%>/edit/<%=ans._id %>?_method=PUT" method="POST" novalidate>
+                                    <div class="mb-3">
+                                        <label for="question" class="form-label">Answer : </label>
+                                        <input type="text" class="form-control" id="question" value="<%= ans.answer%>"name="newAnswer" required>
+                                    </div>
+                                    <div class="container d-flex justify-content-center align-items-center mt-2 mb-3">
+                                        <button class="btn btn-primary">DONE</button>
+                                    </div>
+                                </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>  
+            <%= ans.answer %> 
         </div>
     </div>
 <% } %> 
+
+<!-- Modal for editing answers -->
+<!-- <div class="modal fade" id="editBtn" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div> -->
