@@ -28,8 +28,8 @@ const PORT = process.env.PORT || 8080;
 
 const clientID = process.env.CLIENTID;
 const clientSecret = process.env.CLIENTSECRET;
-// const dbUrl =  'mongodb://localhost:27017/collegeQuora';
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/collegeQuora'
+const dbUrl =  'mongodb://localhost:27017/collegeQuora';
+// const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/collegeQuora'
 const SECRET = process.env.SECRET || 'thisisasecret';
 
 mongoose.connect(dbUrl, {
