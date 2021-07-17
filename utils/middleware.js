@@ -73,3 +73,27 @@ module.exports.authorizeQuestion = async (req, res, next) => {
     }
     next();
 }
+
+// module.exports.alreadyUpVoted = async (req, res, next) => {
+//     const {id, a_id} = req.params;
+//     const currentUserId = req.user._id;
+//     const reqAnswer = await Answer.findById(a_id);
+//     console.log(reqAnswer.voters);
+//     if(reqAnswer.upVoters.includes(currentUserId)){
+//         res.redirect(`/collegeQuora/${id}`);
+//     }
+//     else
+//         next();
+// }
+
+// module.exports.alreaDownVoted = async (req, res, next) => {
+//     const {id, a_id} = req.params;
+//     const currentUserId = req.user._id;
+//     const reqAnswer = await Answer.findById(a_id);
+//     console.log(reqAnswer.voters);
+//     if(reqAnswer.downVoters.includes(currentUserId)){
+//         res.redirect(`/collegeQuora/${id}`);
+//     }
+//     else
+//         next();
+// }

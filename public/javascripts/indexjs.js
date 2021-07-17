@@ -1,5 +1,9 @@
 
-document.getElementById("newQuestionBlock").style.cursor = "pointer";
+const newQuestionBlock = document.getElementById("newQuestionBlock");
+
+if(newQuestionBlock){
+    newQuestionBlock.style.cursor = "pointer";
+}
 
 const toggleBtn = document.querySelector('.darkmode-toggle');
 

@@ -44,14 +44,31 @@ router.get('/search', catchAsync(async(req, res) => {
 router.get('/:id', catchAsync( async (req, res) => {
     const ID = req.params.id;
     // console.log(ID);
-    const reqQuestion = await Question.findById(ID).populate('answers');
+    const reqQuestion = await Question.findById(ID).populate({
+        path: 'answers',
+        populate: [{
+            path: 'upVoters',
+            model: 'User',
+            select: 'name'
+        },
+        {
+            path: 'downVoters',
+            model: 'User',
+            select: 'name',
+        }]
+    })
     // console.log('outside');
     // console.log(reqQuestion);
+    // console.log(reqQuestion.answers[0].upVoters);
+    // console.log(reqQuestion.answers[0].downVoters);
+
+    
     if(!reqQuestion){
         // console.log('inside the if');
         req.flash('error', "Can't able to find the question !");
         return res.redirect('/collegeQuora');
     }
+    reqQuestion.answers.sort((a, b) => b.votes - a.votes);
     res.render('questions/show', {reqQuestion});
 }))
 

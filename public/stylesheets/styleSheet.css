@@ -22,6 +22,61 @@
   text-decoration: none;
 }
 
+
+#upvote a:link {
+  color: rgb(87, 161, 87);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#upvote a:visited {
+  color: rgb(87, 161, 87);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#upvote a:hover {
+  color: rgb(87, 161, 87);
+  box-shadow: 5px 5px 2px -1px rgb(191, 219, 145);
+  border-left-color: rgb(80, 126, 36);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#upvote a:active {
+  color: rgb(87, 161, 87);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
+#downvote a:link {
+  color: rgb(235, 93, 93);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#downvote a:visited {
+  color: rgb(235, 93, 93);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#downvote a:hover {
+  color: rgb(235, 93, 93);
+  box-shadow: 5px 5px 2px -1px rgb(235, 132, 101);
+  border-left-color: rgb(235, 114, 84);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#downvote a:active {
+  color: rgb(235, 93, 93);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
 .darkmode--activated #newQuestionBlock {
   background-color: #2d2d2d2a;
 }
@@ -56,3 +111,32 @@
   background-color: transparent;
   text-decoration: none;
 } */
+
+
+.top{
+    color: black;
+    font-size: 2rem;
+    background: honeydew;
+    width: 3rem;
+    height: 3rem;
+    position: fixed;
+    border-radius: 50%;
+    border: none;
+    bottom: 1rem;
+    right: 2rem;
+    border: black 1px solid;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top:hover{
+    color: black;
+    background: white;
+    font-size: 3rem;
+    border: white 5px solid;
+    justify-content: center;
+    align-items: center;
+}

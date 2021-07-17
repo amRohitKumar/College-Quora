@@ -6,8 +6,19 @@ const AnswerSchema = new Schema({
     date: String,
     author: String,
     authorId: String,
-    upVotes: Number,
-    downVotes: Number,
+    votes: Number,
+    upVoters : [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ],
+    downVoters : [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
 })
 
 const Answer = mongoose.model('Answer', AnswerSchema);

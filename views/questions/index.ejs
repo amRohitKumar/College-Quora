@@ -3,7 +3,7 @@
 <div id="newQuestionBlock" class="border mt-4 p-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <% if(currentUser){ %> 
         <div class="container text-secondary">
-            <%= currentUser.name %> 
+            <i class="bi bi-patch-check-fill"></i> <%= currentUser.name %> 
         </div>
         <div class="container text-dark mt-2">
             Add your question here !
@@ -57,7 +57,7 @@
     <div id="questionBlock" class="card my-2 p-1">
         <div class="card-body">
             <span class="h6 card-title text-capitalize font-weight-bold">
-                <%= q.author%>  
+                <i class="bi bi-caret-right-fill"></i> <%= q.author%>  
             </span>
             <span class="blockquote-footer"> Asked on  <%= q.date %> </span>
             <div id="mainQuestion" class="mainQuestions">
