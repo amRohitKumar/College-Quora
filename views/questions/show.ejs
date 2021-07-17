@@ -170,8 +170,14 @@
                     <div class="modal-body">
                         <!-- list of upvoters -->
                         <ul class="list-group">
-                            <% for(let upVoter of ans.upVoters){ %> 
-                                <li class="list-group-item"> <%= upVoter.name %>  </li>
+                            <% if(ans.upVoters.length == 0){ %> 
+                                <div class="alert alert-light" role="alert">
+                                    No Up Votes found !
+                                </div>
+                            <% }else{ %> 
+                                <% for(let upVoter of ans.upVoters){ %> 
+                                    <li class="list-group-item"> <%= upVoter.name %>  </li>
+                                <% } %> 
                             <% } %> 
                         </ul>
                     </div>
@@ -190,8 +196,14 @@
                     <div class="modal-body">
                         <!-- List of donwvVoters -->
                         <ul class="list-group">
-                            <% for(let downVoter of ans.downVoters){ %> 
-                                <li class="list-group-item"> <%= downVoter.name %>  </li>
+                            <% if(ans.downVoters.length == 0){ %> 
+                                <div class="alert alert-light" role="alert">
+                                    No Down Votes found !
+                                </div>
+                            <% }else{ %> 
+                                <% for(let downVoter of ans.downVoters){ %> 
+                                    <li class="list-group-item"> <%= downVoter.name %>  </li>
+                                <% } %> 
                             <% } %> 
                         </ul>
                     </div>
