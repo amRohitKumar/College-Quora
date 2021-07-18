@@ -60,10 +60,12 @@
                 <i class="bi bi-caret-right-fill"></i> <%= q.author%>  
             </span>
             <span class="blockquote-footer"> Asked on  <%= q.date %> </span>
-            <div id="mainQuestion" class="mainQuestions">
-                <a href="/collegeQuora/<%= q._id %>" class="card-text lead text-decoration-none">
+            <div id="mainQuestion" class="mainQuestions" onclick="location.href='/collegeQuora/<%= q._id %>';" style="cursor:pointer;">
+                <span class="card-text lead text-decoration-none">
                     <%= q.question %> 
-                </a>
+                </span>
+
+
             </div>
         </div>
     </div>
