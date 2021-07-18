@@ -3,8 +3,28 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const Question = require('../models/questions');
 const ExpressError = require('../utils/ExpressError');
+const Fuse = require('fuse.js');
 const {validateQuestion, questionDeleteMiddleware, isLoggedIn, authorizeQuestion} = require('../utils/middleware');
 const {DateAndMonth, Time} = require('../utils/helperFunction');
+
+const fuseOptions = {
+    isCaseSensitive: false,
+    includeScore: false,
+    shouldSort: true,
+    includeMatches: false,
+    findAllMatches: false,
+    minMatchCharLength: 1,
+    location: 0,
+    threshold: 0.6,
+    distance: 100,
+    useExtendedSearch: false,
+    ignoreLocation: false,
+    ignoreFieldNorm: false,
+    keys: [
+      "question",
+      "author"
+    ]
+};
 
 router.get('', catchAsync( async (req, res) => {
     const questions = await Question.find({});
@@ -33,12 +53,21 @@ router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, ne
 router.get('/search', catchAsync(async(req, res) => {
     const {searchInput} = req.query;
     const allQuestions = await Question.find({});
-    const searchResult = allQuestions.filter(currQuestion => {
-        if(currQuestion.question.includes(searchInput)){
-            return true;
-        }
-    })
-    res.render('questions/index', {questions: searchResult});
+    const fuse = new Fuse(allQuestions, fuseOptions);
+    const resultArr = fuse.search(searchInput);
+    // console.log(resultArr);
+    let result = [];
+    for(let currItem of resultArr){
+        result.push(currItem.item)
+    }
+    // console.log(result);
+    // const searchResult = allQuestions.filter(currQuestion => {
+    //     if(currQuestion.question.includes(searchInput)){
+    //         return true;
+    //     }
+    // })
+    // res.render('questions/index', {questions: searchResult});
+    res.render('questions/index', {questions: result});
 }))
 
 router.get('/:id', catchAsync( async (req, res) => {
