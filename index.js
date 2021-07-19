@@ -121,6 +121,10 @@ passport.use(
                         name: displayName,
                         emailId: emailId,
                         username: emailId,
+                        qAsked: 0, 
+                        qAnswered: 0, 
+                        upVotes: 0, 
+                        downVotes: 0
                     });
                     await registeredUser.save();
                     await done(null, registeredUser);
