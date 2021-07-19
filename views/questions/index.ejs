@@ -56,7 +56,7 @@
 <% for(let q of questions){ %>
     <div id="questionBlock" class="card my-2 p-1">
         <div class="card-body">
-            <span class="h6 card-title text-capitalize font-weight-bold">
+            <span class="h6 card-title text-capitalize font-weight-bold" onclick="location.href='/profile/<%= q.authorId%>';" style="cursor:pointer;">
                 <i class="bi bi-caret-right-fill"></i> <%= q.author%>  
             </span>
             <span class="blockquote-footer"> Asked on  <%= q.date %> </span>

@@ -15,7 +15,10 @@ router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, r
     const currentDate = DateAndMonth();
     // res.send("ya ya not bad !!!");
     const reqQuestion = await Question.findById(ID);
-    console.log(req.user);
+    const reqUser = await User.findById(authorId);
+    let i = reqUser.qAnswered;
+    reqUser.reqAnswered  = i+1;
+    await reqUser.save();
     const newAnswer = new Answer({answer: answer, date: currentDate, author : author, authorId : authorId, votes : 0});
     reqQuestion.answers.push(newAnswer);
     await newAnswer.save();
@@ -40,7 +43,7 @@ router.get('/:id/upvote/:a_id', isLoggedIn, catchAsync( async(req, res) => {
     let res2 = alreadyDownVoted(reqAnswer, req.user._id)
     // console.log("res1 = ", res1);
     // console.log("res2 = ", res2);
-
+    // const reqUser = await User.findById(req.user._id);
     if(res1 === true){
         const index = reqAnswer.upVoters.indexOf(req.user._id);
         reqAnswer.upVoters.splice(index, 1);

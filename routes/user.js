@@ -8,10 +8,18 @@ router.get('/register', (req, res) => {
     res.render('user/register');
 })
 
+
+router.get('/profile/:id', catchAsync( async(req, res) => {
+    const {id} = req.params;
+    const reqUser = await User.findById(id);
+    console.log(reqUser);
+    res.render('user/userProfile', {reqUser});
+}))
+
 router.post('/register', catchAsync(async (req, res) => {
     try {
         const { name, username, email, password } = req.body;
-        const newUser = new User({ name: name, emailId: email, username: username });
+        const newUser = new User({ name: name, emailId: email, username: username, qAsked: 0, qAnswered: 0, upVotes: 0, downVotes: 0 });
         const registerdUser = await User.register(newUser, password);
         req.login(registerdUser, err => {
             if(err) return next(err);

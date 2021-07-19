@@ -109,7 +109,7 @@
                 <div style="display: block;">
                     <div class="d-flex align-items-top" style="justify-content: space-between;">
                         <div class="d-block">
-                            <h6 class="card-title font-weight-bold">
+                            <h6 class="card-title font-weight-bold" onclick="location.href='/profile/<%= ans.authorId%>';" style="cursor:pointer;">
                                 <% if(currentUser && currentUser._id == ans.authorId){ %>
                                     <i class="bi bi-chevron-compact-right"></i>
                                 <% } %>  

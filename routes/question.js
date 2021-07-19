@@ -43,6 +43,10 @@ router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, ne
     const currentTime = Time();
     const author = req.user.name;
     const authorId = req.user._id;
+    const reqUser = await User.findById(authorId);
+    let i = reqUser.qAsked;
+    reqUser.qAsked = i + 1;
+    await reqUser.save(); 
     const newQuestion = new Question({question: question.question, date: currentDate, author : author, authorId: authorId, time: currentTime});
     await newQuestion.save();
     req.flash('success', 'Successfully added a new Question !');
