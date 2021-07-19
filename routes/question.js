@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const Question = require('../models/questions');
 const ExpressError = require('../utils/ExpressError');
 const Fuse = require('fuse.js');
+const User = require('../models/user');
 const {validateQuestion, questionDeleteMiddleware, isLoggedIn, authorizeQuestion} = require('../utils/middleware');
 const {DateAndMonth, Time} = require('../utils/helperFunction');
 
