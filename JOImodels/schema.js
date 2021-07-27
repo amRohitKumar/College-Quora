@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 module.exports.questionSchema = Joi.object({
     question : Joi.object({
+        heading : Joi.string().required(),
         question : Joi.string().required(),
     }).required()
 })

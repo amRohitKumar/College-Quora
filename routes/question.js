@@ -23,7 +23,8 @@ const fuseOptions = {
     ignoreFieldNorm: false,
     keys: [
       "question",
-      "author"
+      "author",
+      "heading",
     ]
 };
 
@@ -39,7 +40,7 @@ router.get('', catchAsync( async (req, res) => {
 
 router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, next) => {
     
-    const question = req.body.question
+    const question = req.body.question;
     const currentDate = DateAndMonth();
     const currentTime = Time();
     const author = req.user.name;
@@ -48,7 +49,7 @@ router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, ne
     let i = reqUser.qAsked;
     reqUser.qAsked = i + 1;
     await reqUser.save(); 
-    const newQuestion = new Question({question: question.question, date: currentDate, author : author, authorId: authorId, time: currentTime});
+    const newQuestion = new Question({heading: question.heading, question: question.question, date: currentDate, author : author, authorId: authorId, time: currentTime});
     await newQuestion.save();
     req.flash('success', 'Successfully added a new Question !');
     res.redirect(`/collegeQuora/${newQuestion._id}`);
@@ -115,8 +116,9 @@ router.get('/:id', catchAsync( async (req, res) => {
 router.put('/:id/edit', isLoggedIn, authorizeQuestion , validateQuestion,catchAsync( async (req, res) => {
     
     const newQuestion = req.body.question.question;
+    const newHeading  = req.body.question.heading;
     const ID = req.params.id;
-    const updatedQuestion = await Question.findByIdAndUpdate(ID, {question: newQuestion});
+    const updatedQuestion = await Question.findByIdAndUpdate(ID, {heading: newHeading, question: newQuestion});
     res.redirect(`/collegeQuora/${ID}`);
 }))
 

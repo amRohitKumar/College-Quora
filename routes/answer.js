@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const {storage} = require('../cloudinary');
+const upload = multer({storage});
 const catchAsync = require('../utils/catchAsync');
 const Answer = require('../models/answers');
 const Question = require('../models/questions');
+const User = require('../models/user');
 const ExpressError = require('../utils/ExpressError');
 const { validateAnswer, isLoggedIn, authorizeAnswer} = require('../utils/middleware');
 const {DateAndMonth, alreadyUpVoted, alreadyDownVoted} = require('../utils/helperFunction');
 
-router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, res) => {
+router.post('/:id/review', isLoggedIn, upload.array('image') ,validateAnswer ,catchAsync( async (req, res) => {
     const ID = req.params.id;
     const answer = req.body.answer;
     const author = req.user.name;
@@ -19,13 +23,22 @@ router.post('/:id/review', isLoggedIn, validateAnswer, catchAsync( async (req, r
     let i = reqUser.qAnswered;
     reqUser.reqAnswered  = i+1;
     await reqUser.save();
+
     const newAnswer = new Answer({answer: answer, date: currentDate, author : author, authorId : authorId, votes : 0});
+    newAnswer.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     reqQuestion.answers.push(newAnswer);
     await newAnswer.save();
+    console.log("hey");
+    console.log(newAnswer);
     await reqQuestion.save();
     req.flash('success', 'Added new answer !');
     res.redirect(`/collegeQuora/${ID}`);
 }))
+
+// router.post('/:id/review', upload.array('image') ,(req, res) => {
+//     console.log(req.body, req.files);
+//     res.send("it worked");
+// })
 
 router.put('/:id/edit/:a_id', authorizeAnswer, catchAsync(async (req, res) => {
     const {id, a_id} = req.params;

@@ -24,6 +24,16 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form class="my-3 mx-3 validated-form" action="/collegeQuora/new" method="POST" novalidate>
+                    <div class="my-2">
+                        <label for="heading" class="form-label">Heading : </label>
+                        <textarea type="text" class="form-control" id="heading" placeholder="Question heading ..."  name="question[heading]" style="height: 2rem;" required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter a valid heading.
+                        </div>
+                    </div>
                     <div class="my-3">
                         <label for="question" class="form-label">Question : </label>
                         <textarea type="text" class="form-control" id="question" placeholder="Enter your question here ..."  name="question[question]" style="height: 15rem;" required></textarea>
@@ -62,7 +72,7 @@
             <span class="blockquote-footer"> Asked on  <%= q.date %> </span>
             <div id="mainQuestion" class="mainQuestions" onclick="location.href='/collegeQuora/<%= q._id %>';" style="cursor:pointer;">
                 <span class="card-text lead text-decoration-none">
-                    <%= q.question %> 
+                    <%= q.heading %> 
                 </span>
 
 
