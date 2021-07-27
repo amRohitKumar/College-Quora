@@ -25,10 +25,11 @@ router.post('/:id/review', isLoggedIn, upload.array('image') ,validateAnswer ,ca
     await reqUser.save();
 
     const newAnswer = new Answer({answer: answer, date: currentDate, author : author, authorId : authorId, votes : 0});
+    console.log(req.files);
     newAnswer.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     reqQuestion.answers.push(newAnswer);
     await newAnswer.save();
-    console.log("hey");
+    // console.log("hey");
     console.log(newAnswer);
     await reqQuestion.save();
     req.flash('success', 'Added new answer !');
