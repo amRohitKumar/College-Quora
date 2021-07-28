@@ -47,6 +47,9 @@ router.post('/new', isLoggedIn, validateQuestion, catchAsync( async(req, res, ne
     const authorId = req.user._id;
     const reqUser = await User.findById(authorId);
     let i = reqUser.qAsked;
+    if(Number.isNaN(i)){
+        i = 0;
+    }
     reqUser.qAsked = i + 1;
     await reqUser.save(); 
     const newQuestion = new Question({heading: question.heading, question: question.question, date: currentDate, author : author, authorId: authorId, time: currentTime});
