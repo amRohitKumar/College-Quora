@@ -27,6 +27,11 @@ const AnswerSchema = new Schema({
     ]
 })
 
+// AnswerSchema.post('findOneAndDelete', async function(data){
+//     console.log("post");
+//     console.log(data);
+// })
+
 const Answer = mongoose.model('Answer', AnswerSchema);
 
 module.exports = Answer;

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const {storage} = require('../cloudinary');
+const {cloudinary ,storage} = require('../cloudinary');
 const upload = multer({storage});
 const catchAsync = require('../utils/catchAsync');
 const Answer = require('../models/answers');
@@ -25,7 +25,7 @@ router.post('/:id/review', isLoggedIn, upload.array('image') ,validateAnswer ,ca
     await reqUser.save();
 
     const newAnswer = new Answer({answer: answer, date: currentDate, author : author, authorId : authorId, votes : 0});
-    console.log(req.files);
+    // console.log(req.files);
     newAnswer.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     reqQuestion.answers.push(newAnswer);
     await newAnswer.save();
@@ -115,6 +115,20 @@ router.delete('/:id/review/:a_id/delete', isLoggedIn, authorizeAnswer, catchAsyn
 
     const {id, a_id} = req.params;
     const reqAnswer = await Answer.findByIdAndDelete(a_id);
+    // console.log(reqAnswer);
+    if(reqAnswer.images.length > 0){
+        // DELETE ALL IMAGES
+        for(let img of reqAnswer.images){
+            //img is the image object
+            await cloudinary.uploader.destroy(img.filename);
+        }
+    }
+    const parentQuestion = await Question.findById(id);
+    const answerArray = parentQuestion.answers;
+    const index = answerArray.indexOf(a_id);
+    answerArray.splice(index, 1);
+    // console.log(answerArray);
+    parentQuestion.save();
     req.flash('success', 'Answer deleted !');
     res.redirect(`/collegeQuora/${id}`);
 

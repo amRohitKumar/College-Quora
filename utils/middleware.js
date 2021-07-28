@@ -2,7 +2,7 @@ const {questionSchema, answerSchema} = require('../JOImodels/schema');
 const ExpressError = require('../utils/ExpressError');
 const Question = require('../models/questions');
 const Answer = require('../models/answers');
-
+const {cloudinary} = require('../cloudinary');
 
 module.exports.validateQuestion = (req, res, next) => {
     
@@ -20,8 +20,17 @@ module.exports.questionDeleteMiddleware = async (req, res, next) => {
     const {id} = req.params;
     const reqQuestion = await Question.findById(id);
     // console.log(reqQuestion);
+    // console.log("from middleware");
+    // console.log(reqQuestion);
     for(let ans of reqQuestion.answers){
-        await Answer.findByIdAndDelete(ans);
+        const deletedAnswer = await Answer.findByIdAndDelete(ans);
+        // console.log(deletedAnswer);
+        if(deletedAnswer.images){
+            for(let img of deletedAnswer.images){
+                await cloudinary.uploader.destroy(img.filename);
+            }
+        }
+        // await Answer.findByIdAndDelete(ans);
     }
     next();
 }
